@@ -11,9 +11,10 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.work.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.manoamaro.hackernews.api.HackerNewsApi
+import com.manoamaro.hackernews.databinding.ActivityMainBinding
 import com.manoamaro.hackernews.repository.ItemRepository
 import com.manoamaro.hackernews.worker.UpdateStoriesWorker
-import kotlinx.android.synthetic.main.activity_main.*
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -28,12 +29,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.nav_view)
 
         val navController = findNavController(R.id.nav_host_fragment)
         val appBarConfiguration = AppBarConfiguration(setOf(R.id.navigation_newest_stories, R.id.navigation_dashboard, R.id.navigation_notifications))
-        app_collapsingToolbar.setupWithNavController(app_toolbar, navController, appBarConfiguration)
+        binding.appCollapsingToolbar.setupWithNavController(binding.appToolbar, navController, appBarConfiguration)
 
         bottomNavigationView.setupWithNavController(navController)
 

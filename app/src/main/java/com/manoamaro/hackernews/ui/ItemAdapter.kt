@@ -2,20 +2,17 @@ package com.manoamaro.hackernews.ui
 
 import android.text.format.DateUtils
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.manoamaro.hackernews.R
+import com.manoamaro.hackernews.databinding.CardItemBinding
 import com.manoamaro.hackernews.db.entity.Item
-import kotlinx.android.synthetic.main.card_item.view.*
 import java.time.ZoneId
 
 class ItemAdapter(private val onClickListener: (Item?) -> Unit): PagedListAdapter<Item, ItemViewHolder>(ITEM_DIFF_CALLBACK) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.card_item, parent, false)
-        return ItemViewHolder(view)
+        return ItemViewHolder(CardItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
@@ -23,17 +20,17 @@ class ItemAdapter(private val onClickListener: (Item?) -> Unit): PagedListAdapte
     }
 }
 
-class ItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+class ItemViewHolder(val binding: CardItemBinding): RecyclerView.ViewHolder(binding.root) {
     fun bindTo(item: Item?, onClickListener: (Item?) -> Unit) {
-        itemView.cardItem_title.text = item?.title
-        itemView.cardItem_comments.text = item?.descendants?.toString()
-        itemView.cardItem_score.text = item?.score?.toString()
+        binding.cardItemTitle.text = item?.title
+        binding.cardItemComments.text = item?.descendants?.toString()
+        binding.cardItemScore.text = item?.score?.toString()
         item?.dateTime?.let { dateTime ->
             ZoneId.systemDefault().id
             val instant = dateTime.atZone(ZoneId.systemDefault()).toInstant()
-            itemView.cardItem_datetime.text = DateUtils.getRelativeTimeSpanString(instant.toEpochMilli())
+            binding.cardItemDatetime.text = DateUtils.getRelativeTimeSpanString(instant.toEpochMilli())
         }
-        itemView.cardItem_title.setOnClickListener { onClickListener(item) }
+        binding.cardItemTitle.setOnClickListener { onClickListener(item) }
     }
 }
 
